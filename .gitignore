@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.log
+*.rom
+*.bin
+ha_token
+*token*
+.venv/
+venv/
+aesenv/
+logs/
