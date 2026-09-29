@@ -1,14 +1,14 @@
 # akuvox-c313-root
 
 Roots the Akuvox C313V3 indoor intercom (SigmaStar SSD202D, Linux 4.9). Gives you
-a persistent root SSH login. Tested on firmware 313.30.15.906.
+a persistent root SSH login. Likely only works on firmware 313.30.15.906 (AES keys
+seem to change with each release).
 
 ## How it works
 
-Product Mode on these units opens SSH (port 22) and starts `remote_debug_server`,
-which dials out to a server address you set in the web UI and accepts a
-`PROTOCOL_CMD_SHELL` command — arbitrary commands as root. This script is that
-server. It waits for the device to call home, then:
+Akuvox supports a `remote_debug_server` which dials out to a server address you set
+in the web UI. It accepts `PROTOCOL_CMD_SHELL` command which runs arbitrary commands
+as root. This script is that server. It waits for the device to call home, then:
 
 - sets a root password (default `hass1234`)
 - drops a `/config/basictest.sh` that (re)starts dropbear and the normal UI on every
@@ -28,12 +28,10 @@ Python 3.8+. You'll need this machine's LAN IP (something the intercom can reach
 
 ## Usage
 
-In the intercom's web admin (Security / Advanced / System-Debug, depending on
-firmware), set:
+In the intercom's web admin (`https://<device-ip>/fcgi/do?id=8848`), set:
 
-- `Product Mode Active` -> Enabled
-- `Remote Debug Server IP Address` -> this machine's IP
-- `Remote Debug Server` -> Enabled
+- `Remote Debug Server -> Enabled` -> Enabled
+- `Remote Debug Server -> IP Address` -> this machine's IP
 
 Apply. The device now dials this machine on port 9500 every ~20 seconds.
 
